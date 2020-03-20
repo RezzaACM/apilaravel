@@ -11,6 +11,7 @@ class BookController extends Controller
 
     public function __construct(Book $model)
     {
+        $this->middleware('basicAuth');
         $this->book = $model;
     }
     /**

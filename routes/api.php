@@ -18,10 +18,17 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+
+
 Route::middleware(['basicAuth'])->group(function () {
     //All the routes are placed in here
-    // Route::get('/', 'LoginController@index');
-    // Route::get('/home', 'DashboardController@dashboard');
-    Route::resource('books', 'BookController');
+    // Route::resource('books', 'BookController');
+    Route::get('/books','BookController@index');
+    Route::get('/book/{id}','BookController@show');
+    Route::post('/book/store','BookController@store');
+    Route::post('/book/update/{id}','BookController@update');
+    Route::post('/book/delete','BookController@destroy');
+
+    Route::post('/login-admin','LoginController@loginAct');
 });
 
