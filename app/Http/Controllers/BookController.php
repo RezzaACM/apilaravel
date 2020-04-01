@@ -140,10 +140,12 @@ class BookController extends Controller
         $data = DB::table('books')->where('id', $book->id)->delete();
 
         if ($data) {
+            $res['status'] = 'true';
             $res['message'] = "Success! Data has been deleted.";
-            $res['value'] = "$data";
+            $res['data'] = "$data";
             return response($res);
         } else {
+            $res['status'] = 'true';
             $res['message'] = "Failed!";
             return response($res);
         }

@@ -102,10 +102,12 @@ class LoginController extends Controller
         
         $check = $this->loginModel->check_login($data->email, $data->password);
         if($check){
+            $res['status'] = 'true';
             $res['message'] = 'Success!';
-            $res['values'] = $check;
+            $res['data'] = $check;
             return response($res, 200);
         }else{
+            $res['status'] = 'false';
             $res['message'] = 'Incorrect email or password!';
             return response($res, 401);
         }
