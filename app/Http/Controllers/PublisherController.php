@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
+use App\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class BookController extends Controller
+class PublisherController extends Controller
 {
 
-    public function __construct(Book $model)
+    public function __construct(Publisher $model)
     {
         $this->middleware('basicAuth');
-        $this->book = $model;
+        $this->publisher = $model;
     }
     /**
      * Display a listing of the resource.
@@ -21,18 +21,18 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
-        $data = $this->book->getBook();
-        // return $data;
+        //get book function
+        $data = $this->publisher->_getPublisher();
 
         if (count($data) > 0) {
-            $res['status']='true';
-            $res['message'] = 'success!';
+            $res['status'] = true;
+            $res['message'] = 'success display data publisher';
             $res['data'] = $data;
-            return response($res);
+            return response($res, 200);
         } else {
-            $res['message'] = 'failed!';
-            return response($res);
+            $res['status'] = false;
+            $res['message'] = 'failed display data publisher';
+            return response($res, 404);
         }
     }
 
@@ -55,18 +55,19 @@ class BookController extends Controller
     public function store(Request $request)
     {
         //
-        $book = $this->book;
-        $book->title = $request->get('title');
-        $book->description = $request->get('description');
-        $book->qty = $request->get('qty');
-        $book->publisher = $request->get('publisher');
-        if ($book->save()) {
-            $res['message'] = 'Success!';
-            $res['data'] = $book;
+        $publisher = $this->publisher;
+        $publisher->name = $request->get('name');
+        $publisher->address = $request->get('address');
+        $publisher->phone_number = $request->get('phone_number');
+        if ($publisher->save()) {
+            $res['status'] = true;
+            $res['message'] = 'success create new publisher';
+            $res['data'] = $publisher;
             return response($res, 201);
         } else {
-            $res['message'] = 'failed to insert data!';
-            return response($res);
+            $res['status'] = false;
+            $res['message'] = 'failed create new publisher';
+            return response($res, 400);
         }
     }
 
@@ -78,17 +79,19 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
-        $data = $this->book->getBookId($id);
+        //get data byid
+        $data = $this->publisher->_getPublisherId($id);
+        // var_dump($data);
         if (count($data) > 0) {
-            $res['message'] = 'success!';
+            $res['status'] = true;
+            $res['message'] = 'success display data publisher';
             $res['data'] = $data;
-            return response($res);
+            return response($res, 200);
         } else {
-            $res['message'] = 'data not found!';
+            $res['status'] = false;
+            $res['message'] = 'failed display data publisher';
             return response($res, 404);
         }
-        // return $data;
     }
 
     /**
@@ -112,18 +115,19 @@ class BookController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $book = $this->book::find($id);
-        $book->title = $request->get('title');
-        $book->description = $request->get('description');
-        $book->qty = $request->get('qty');
-        $book->publisher = $request->get('publisher');
-        if ($book->save()) {
-            $res['message'] = 'Success! Datas has been updated.';
-            $res['data'] = $book;
+        $publisher = $this->publisher::find($id);
+        $publisher->name = $request->get('name');
+        $publisher->address = $request->get('address');
+        $publisher->phone_number = $request->get('phone_number');
+        if ($publisher->save()) {
+            $res['status'] = true;
+            $res['message'] = 'success update data publisher';
+            $res['data'] = $publisher;
             return response($res, 200);
         } else {
-            $res['message'] = 'failed to update data!';
-            return response($res);
+            $res['status'] = false;
+            $res['message'] = 'failed update data publisher';
+            return response($res, 400);
         }
     }
 
@@ -136,17 +140,17 @@ class BookController extends Controller
     public function destroy(Request $request)
     {
         //
-        $book = $this->book;
-        $book->id = $request->get('id');
-        $data = DB::table('books')->where('id', $book->id)->delete();
+        $publisher = $this->publisher;
+        $publisher->id = $request->get('id');
+        $data = DB::table('publishers')->where('id', $publisher->id)->delete();
 
         if ($data) {
-            $res['status'] = 'true';
+            $res['status'] = true;
             $res['message'] = "Success! Data has been deleted.";
             $res['data'] = "$data";
             return response($res);
         } else {
-            $res['status'] = 'true';
+            $res['status'] = false;
             $res['message'] = "Failed!";
             return response($res);
         }

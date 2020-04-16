@@ -23,12 +23,24 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['basicAuth'])->group(function () {
     //All the routes are placed in here
     // Route::resource('books', 'BookController');
-    Route::get('/books','BookController@index');
-    Route::get('/book/{id}','BookController@show');
-    Route::post('/book/store','BookController@store');
-    Route::post('/book/update/{id}','BookController@update');
-    Route::post('/book/delete','BookController@destroy');
+    Route::get('/books', 'BookController@index');
+    Route::get('/book/{id}', 'BookController@show');
+    Route::post('/book/store', 'BookController@store');
+    Route::post('/book/update/{id}', 'BookController@update');
+    Route::post('/book/delete', 'BookController@destroy');
 
-    Route::post('/login-admin','LoginController@loginAct');
+    // login admin
+    Route::post('/login-admin', 'LoginController@loginAct');
+
+    // publisher
+    Route::get('publishers', 'PublisherController@index');
+    Route::post('publisher/store', 'PublisherController@store');
+
+
+
+    // customer
+    Route::post('customer/register', 'CustomerController@store');
+    Route::post('customer/verifySuccess/{token}', 'CustomerController@verifySuccess');
 });
 
+Route::get('send/email', 'CustomerController@mail');

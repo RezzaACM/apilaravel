@@ -11,15 +11,15 @@ class LoginModel extends Model
 
     protected $table = 'users';
 
-    public function check_login($email, $pass){
+    public function check_login($email, $pass)
+    {
         $sql = DB::select('
-            SELECT * FROM users WHERE email = '."\"$email\"".' AND password ='."\"$pass\"");
+            SELECT * FROM users WHERE email = ' . "\"$email\"" . ' AND password =' . "\"$pass\"");
 
-        if(count($sql)>0){
+        if (count($sql) > 0) {
             return $sql;
-        }else{
+        } else {
             return false;
         }
     }
-    
 }
