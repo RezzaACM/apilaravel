@@ -41,6 +41,12 @@ Route::middleware(['basicAuth'])->group(function () {
     // customer
     Route::post('customer/register', 'CustomerController@store');
     Route::post('customer/verifySuccess/{token}', 'CustomerController@verifySuccess');
+
+
+    // Reset Password
+    Route::post('customer/reset-password', 'ResetPasswordController@create');
+    Route::post('customer/reset-password-success/{token}', 'ResetPasswordController@tokenSuccess');
+    Route::post('customer/reset', 'ResetPasswordController@resetPassowrd');
 });
 
 Route::get('send/email', 'CustomerController@mail');

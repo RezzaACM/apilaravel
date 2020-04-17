@@ -43,24 +43,31 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //get inputs from frontend
         $customer = $this->customer;
         $customer->name = $request->get('name');
         $customer->email = $request->get('email');
         $customer->phone_number = $request->get('phone_number');
         $customer->password =  bcrypt($request->get('password'));
         $customer->remember_token =  Str::random(60);
-        // $customer->password = $request->get('status');
-        if ($customer->save()) {
-            $res['status'] = true;
-            $res['message'] = 'Success! New Customer Has Been Created';
-            $res['data'] = $customer;
-            Mail::to($customer->email)->send(new EmailVerification($customer));
-            return response($res, 201);
-        } else {
+        // checking if email has been using show status false
+        $checkMail = $this->customer->checkEmail($customer->email);
+        if ($checkMail == true) {
+            if ($customer->save()) {
+                $res['status'] = true;
+                $res['message'] = 'Success! New Customer Has Been Created';
+                $res['data'] = $customer;
+                Mail::to($customer->email)->send(new EmailVerification($customer));
+                return response($res, 201);
+            } else {
+                $res['status'] = false;
+                $res['message'] = 'Failed to Created New Customer';
+                return response($res, 400);
+            }
+        } else { //if email not yet using before let save
             $res['status'] = false;
-            $res['message'] = 'Failed to Created New Customer';
-            return response($res, 400);
+            $res['message'] = 'Email has been using.';
+            return response($res);
         }
 
 
@@ -111,6 +118,7 @@ class CustomerController extends Controller
     {
         //
     }
+    // this function to verify email
     public function verifySuccess(Request $request, $token)
     {
 

@@ -14,14 +14,27 @@ class Customer extends Authenticatable implements MustVerifyEmail
     //
     protected $table = 'customers';
 
+    // check token valid
     public function check_token($token)
     {
         $sql = DB::select('SELECT * FROM customers WHERE remember_token =' . "\"$token\"");
 
         if (count($sql) > 0) {
             return $sql;
-        }else{
+        } else {
             return false;
+        }
+    }
+
+    // check email is not dupilicate
+    public function checkEmail($email)
+    {
+        $sql = DB::select('SELECT * FROM customers WHERE email =' . "\"$email\"");
+
+        if (count($sql) > 0) {
+            return false;
+        }else{
+            return true;
         }
     }
 }
