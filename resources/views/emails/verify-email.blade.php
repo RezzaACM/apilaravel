@@ -4,4 +4,10 @@
 <p>Silahkan Klik Tombol dibawah ini untuk verifikasi email</p>
 <button style="btn btn-success"></button>
 
-<p>Atau klik link berikut: <a href="{{url('api/customer/verifySuccess/'.$customer->remember_token)}}">{{$customer->remember_token}}</a> </p>
+<?php
+
+$token = $customer->remember_token
+
+?>
+
+<p>Atau klik link berikut: <a class="link" href=<?php echo "localhost:4200/login/".$token?>>{{$customer->remember_token}}</a> </p>

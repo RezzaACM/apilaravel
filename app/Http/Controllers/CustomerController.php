@@ -48,7 +48,7 @@ class CustomerController extends Controller
         $customer->name = $request->get('name');
         $customer->email = $request->get('email');
         $customer->phone_number = $request->get('phone_number');
-        $customer->password =  bcrypt($request->get('password'));
+        $customer->password =  md5($request->get('password'));
         $customer->remember_token =  Str::random(60);
         // checking if email has been using show status false
         $checkMail = $this->customer->checkEmail($customer->email);
@@ -145,7 +145,29 @@ class CustomerController extends Controller
         } else {
             $res['status'] = false;
             $res['message'] = 'Token was invalid. Please resend email verification.';
-            return response($res);
+            return response($res, 404);
+        }
+    }
+
+    public function customerAuth(Request $request)
+    {
+        $login = $this->customer;
+        $login->email = $request->get('email');
+        $login->password = md5($request->get('password'));
+        $null = '';
+
+        $check = $this->customer->checkLogin($login->email, $login->password);
+        // dd($check);
+
+        if($check){
+            $res['status'] = true;
+            $res['message'] = 'Login Customer Success!';
+            $res['data'] = $check;
+            return response($res, 200);
+        }else{
+            $res['status'] = false;
+            $res['message'] = 'Email or Password Incorrect';
+        return response($res, 404);
         }
     }
 }

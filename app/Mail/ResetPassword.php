@@ -16,9 +16,11 @@ class ResetPassword extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public $reset;
+    public function __construct($reset)
     {
         //
+        $this->reset = $reset;
     }
 
     /**

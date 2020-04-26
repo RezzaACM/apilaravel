@@ -33,8 +33,20 @@ class Customer extends Authenticatable implements MustVerifyEmail
 
         if (count($sql) > 0) {
             return false;
-        }else{
+        } else {
             return true;
+        }
+    }
+
+    // auth login customer
+    public function checkLogin($email, $password)
+    {
+        $sql = DB::select('SELECT a.* FROM customers a WHERE a.email =' . "\"$email\"" . 'AND password =' . "\"$password\"" . 'AND email_verified_at IS NOT NULL');
+
+        if (count($sql) > 0) {
+            return $sql;
+        } else {
+            return false;
         }
     }
 }

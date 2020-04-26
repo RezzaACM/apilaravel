@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Mail\ResetPassword as MailResetPassword;
 use App\ResetPassword;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
@@ -30,6 +32,7 @@ class ResetPasswordController extends Controller
                 $res['status'] = true;
                 $res['message'] = 'Success! Reset Password has been requested';
                 $res['data'] = $reset;
+                Mail::to($reset->email)->send(new MailResetPassword($reset));
                 return response($res);
             } else {
                 $res['status'] = False;
